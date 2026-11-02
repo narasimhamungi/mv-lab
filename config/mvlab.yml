@@ -1,0 +1,22 @@
+# Validation settings. Thresholds are this project's rubric (docs/rubric.md), not regulatory values,
+# except where a comment names the source.
+var:
+  coverage_alpha: 0.99        # Kupiec, Christoffersen and the Basel traffic light run at 99%
+  es_alpha: 0.975             # ES backtests at 97.5%, the level the Basel FRTB uses for ES
+  traffic_light_window: 250   # Basel backtesting window (days); zones at 99%: green 0-4, yellow 5-9, red 10+
+  exceedance_bootstrap_draws: 5000
+
+pd:
+  model_columns: {gbm: gbm_pd, scorecard: scorecard_pd}
+  score_columns: {gbm: gbm_raw, scorecard: scorecard_raw}
+  primary_window: test        # out-of-time year
+  # mv-lab's own grade scale for calibration tests (the same upper bounds as the model's pricing bands, set
+  # here independently so the validator does not read the model's configuration).
+  grade_upper_pd: [0.02, 0.035, 0.05, 0.07, 0.10, 0.14]
+  grade_names: [A, B, C, D, E, F, G]
+  auc_bootstrap_draws: 200
+  material_share: 0.05        # a grade holding at least this share of loans is material
+  material_relative_gap: 0.10 # a calibration gap must exceed 10% of the PD to count, however small its p-value
+  auc_drop_medium: 0.03       # validation-to-test AUC drop that raises a Medium finding
+  psi_medium: 0.10
+  psi_high: 0.25

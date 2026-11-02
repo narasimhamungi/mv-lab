@@ -1,0 +1,4 @@
+model_id,test,severity,statement,evidence,action
+PD-CONS-01,"Jeffreys test (gbm, grade G)",Low,Grade G's PD is conservative out of time.,"grade G: 2,304 defaults in 14,973 loans, default rate 15.39% against mean PD 17.58%; p = 0.0000",Record; conservative PDs overprice this grade.
+PD-CONS-01,Hosmer-Lemeshow (gbm),Low,"Calibration across deciles is rejected; with this many loans small gaps are significant, and the portfolio-level gap is not material.","HL = 98.4 on 8 df, p = 8.9e-18; default rate 5.72% against mean PD 5.96%",Review the grade table for where the gap sits.
+PD-CONS-01,Hosmer-Lemeshow (scorecard),Low,"Calibration across deciles is rejected; with this many loans small gaps are significant, and the portfolio-level gap is not material.","HL = 39.7 on 8 df, p = 3.7e-06; default rate 5.72% against mean PD 5.87%",Review the grade table for where the gap sits.

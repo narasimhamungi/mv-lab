@@ -1,0 +1,8 @@
+{
+ "kind": "var",
+ "file": "var_backtest_daily.csv",
+ "sha256": "1ab293e30547170cd85d544ec5174ac3d318b6d6618d5f8e25d1a46aeac706ca",
+ "bytes": 1275692,
+ "model_ref": "derivatives-risk-lab, untagged; outputs of the 2026-11-01 run",
+ "taken_at": "2026-11-02T00:44:45+00:00"
+}

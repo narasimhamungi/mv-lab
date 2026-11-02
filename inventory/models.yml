@@ -1,0 +1,36 @@
+# Model inventory: one entry per model in scope, with the identification fields the PRA's SS1/23
+# (Principle 1, model identification and classification) asks a firm to keep. Tiering here is this
+# portfolio's own judgement of materiality for the stated use, not a firm's.
+models:
+  - model_id: VAR-OPT-01
+    name: Options book VaR and ES (historical simulation and delta-normal)
+    repository: https://github.com/narasimhamungi/derivatives-risk-lab
+    version: "untagged; validated on the snapshot hash in data/snapshots/var/manifest.json"
+    owner: Narasimha Mungi (also the validator; see Independence)
+    use: Daily 99% VaR and 97.5% ES for an illustrative equity options book; limit monitoring
+    tier: 2
+    methodology: >-
+      Four methods on the same book: full revaluation and delta-gamma historical simulation, delta-only
+      historical simulation and delta-normal, all on a rolling window of daily returns of the underlyings.
+    inputs: Daily adjusted closes from the marketdata-lakehouse gold layer; book definition in config/book.yml
+    outputs: outputs/var_backtest_daily.csv (VaR, ES, realised P&L per day, method and level)
+    limitations: >-
+      Implied volatility, rates and dividends are held fixed (no option quotes), so the backtest measures
+      non-linearity in spot only.
+    validation_scope: Coverage (Kupiec, Christoffersen, traffic light) and ES (Z2, exceedance residuals)
+  - model_id: PD-CONS-01
+    name: Consumer loan 12-month PD (gradient boosting champion, WoE scorecard challenger)
+    repository: https://github.com/narasimhamungi/credit-pricing-lab
+    version: "untagged; validated on the snapshot hash in data/snapshots/pd/manifest.json"
+    owner: Narasimha Mungi (also the validator; see Independence)
+    use: Risk-based pricing and approval of unsecured consumer loans (illustrative lender)
+    tier: 1
+    methodology: >-
+      Histogram gradient boosting with monotone constraints and a weight-of-evidence scorecard, both
+      recalibrated (isotonic) on the 2016 window; out-of-time test on 2017 originations.
+    inputs: Lending Club accepted loans 2007-2018Q4 (CC0 Kaggle mirror), application-time fields only
+    outputs: "creditlab run --export-scores: loan-level raw score and PD per window"
+    limitations: >-
+      Booked loans only (no rejects), so the PD is conditional on Lending Club's approval; 12-month default
+      approximated from the last payment date because the file has no charge-off date.
+    validation_scope: Discrimination, calibration by grade (Jeffreys), Hosmer-Lemeshow, Spiegelhalter, PSI
