@@ -28,6 +28,7 @@ with tiering, validation independent of development, and findings with remediati
 | PD tests (`pd_tests.py`) | AUC with a bootstrap interval, Jeffreys test by grade, Hosmer-Lemeshow, Spiegelhalter, PSI |
 | Findings and reports (`findings.py`, `report.py`) | Severity from the rubric in `docs/rubric.md`; one Markdown report per model with its conclusion |
 | Demo (`mvlab demo`) | Invented inputs with planted defects (a VaR 25% too low, a VaR that ignores regimes, a PD that drifts out of time); the tests must find each one |
+| Commentary (`commentary.py`) | Grounded narrative, not an LLM call: a fact map built from the computed results and findings, templates that only format and concatenate those values, and a mechanical check that every number in the rendered text traces back to the fact map |
 
 ## Data and tools
 
@@ -108,6 +109,7 @@ mvlab validate var                                  # the committed VaR snapshot
 # PD: export loan-level scores from credit-pricing-lab, snapshot them, validate
 mvlab snapshot pd ../credit-pricing-lab/data/exports/pd_scores.parquet --ref "credit-pricing-lab, <date>"
 mvlab validate pd                                   # -> outputs/pd_validation.md
+mvlab commentary                                    # -> outputs/commentary.md
 ```
 
 ## Repository layout
@@ -117,12 +119,14 @@ inventory/models.yml   model inventory (SS1/23 Principle 1 fields)
 config/mvlab.yml       test levels and rubric thresholds
 docs/rubric.md         severity rubric and conclusion rule
 src/mvlab/             coverage, es_tests, pd_tests, var_validation, pd_validation, findings, report,
-                       snapshot, inventory, synthetic, cli
+                       commentary, snapshot, inventory, synthetic, cli
 data/snapshots/var/    the frozen VaR backtest and its manifest (PD snapshots are git-ignored)
-tests/                 14 tests: each statistic against a hand calculation or a simulation with a known
-                       answer, the independence import check, snapshot hashing, the demo's planted defects
+tests/                 18 tests: each statistic against a hand calculation or a simulation with a known
+                       answer, the independence import check, snapshot hashing, the demo's planted defects,
+                       and commentary's grounding check (every rendered number traces to its fact map)
 outputs/               var_validation.md, var_results.csv, var_findings.csv; pd_validation.md, pd_grades.csv,
                        pd_summary.json, pd_findings.csv (aggregates only)
+                       commentary.md (grounded narrative over both)
 ```
 
 ## Limits

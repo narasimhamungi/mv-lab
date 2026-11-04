@@ -3,6 +3,7 @@
   snapshot var|pd FILE --ref REF   freeze a model output (hash recorded) for validation
   validate var|pd                  run the tests on the snapshot and write the report to outputs/
   demo                             the same on invented inputs with known defects -> outputs/synthetic/
+  commentary                       render grounded narrative from the existing validate outputs -> outputs/commentary.md
 """
 from __future__ import annotations
 
@@ -60,6 +61,9 @@ def main(argv: list[str] | None = None) -> int:
     v.add_argument("--champion", default="gbm", help="the model the PD model's owner uses (default gbm)")
     d = sub.add_parser("demo")
     d.add_argument("--out", default=str(settings.OUTPUTS / "synthetic"))
+    k = sub.add_parser("commentary")
+    k.add_argument("--champion", default="gbm")
+    k.add_argument("--out", default=str(settings.OUTPUTS / "commentary.md"))
     a = ap.parse_args(argv)
     try:
         cfg, inv = settings.load(), inventory.load()
@@ -78,6 +82,13 @@ def main(argv: list[str] | None = None) -> int:
             fp = run_pd(snapshot.take("pd", work / "pd_scores.parquet", "synthetic", work),
                         snapshot.load("pd", work)[1], out, cfg, inv)["findings"]
             print(f"demo: {len(fv) + len(fp)} findings -> {out}")
+            return 0
+        if a.cmd == "commentary":
+            from mvlab import commentary
+            o = settings.OUTPUTS
+            path = commentary.run(o / "var_results.csv", o / "var_findings.csv", o / "pd_summary.json",
+                                   o / "pd_findings.csv", a.champion, Path(a.out))
+            print(f"commentary -> {path}")
             return 0
         out = settings.OUTPUTS
         found = []
