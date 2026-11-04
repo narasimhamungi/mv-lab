@@ -83,6 +83,10 @@ On the invented inputs (`mvlab demo`), each planted defect is found: the VaR 25%
 (red) and the traffic light; the VaR that ignores regimes fails independence; the PD that drifts out of time
 fails the Jeffreys test in every grade; the well-specified VaR raises no finding.
 
+A grounded narrative version of the findings above -- rendered from a fact map, not an LLM call, with every
+number checked against that fact map before the file is written -- is at `outputs/commentary.md`
+(`mvlab commentary`).
+
 ## Insight demonstrated
 
 - A coverage test answers "how many", not "when". Clustering is the failure that matters for a limit framework,
